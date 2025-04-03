@@ -32,7 +32,7 @@ body {
 }
 
 .sidebar {
-    width: 360px;
+    width: 520px;
     background-color: var(--secondary-bg);
     display: flex;
     flex-direction: column;
