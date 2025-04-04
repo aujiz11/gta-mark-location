@@ -167,8 +167,8 @@ function zoomToMarkedLocation(x, y, zoomLevel = 1.5) {
 
     currentScale = zoomLevel;
     
-    mapPosition.x = Math.round(containerWidth / 2 - x * currentScale);
-    mapPosition.y = Math.round(containerHeight / 2 - y * currentScale);
+    mapPosition.x = Math.round(containerWidth / 2 - x * currentScale + currentScale * 180);
+    mapPosition.y = Math.round(containerHeight / 2 - y * currentScale + currentScale * 180);
     
     requestAnimationFrame(() => {
         updateMapTransform();

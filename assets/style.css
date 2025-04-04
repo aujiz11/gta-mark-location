@@ -339,7 +339,9 @@ body {
 
 .map-wrapper {
     position: relative;
-    transform-origin: 0 0;
+    transform-origin: 0 0 !important;
+    width: 1600px; 
+    height: 1200px;
 }
 
 #mapImage {
