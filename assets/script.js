@@ -21,7 +21,7 @@ const GTA_MAX_X = 3000;
 const GTA_MIN_Y = -3000;
 const GTA_MAX_Y = 3000;
 
-const MIN_ZOOM = 0.1;
+const MIN_ZOOM = 0.4;
 const MAX_ZOOM = 5;
 const ZOOM_FACTOR = 1.2;
 
