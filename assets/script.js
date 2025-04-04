@@ -82,7 +82,8 @@ function showLocation(location) {
     const centerZ = (bounds.minZ + bounds.maxZ) / 2;
     const mapCoords = convertToMapCoords(centerX, centerY);
 
-    createMarker(mapCoords.x, mapCoords.y, location.name);
+    const marker = createMarker(mapCoords.x, mapCoords.y, location.name);
+    marker.classList.add('active');
     
     locationInfo.innerHTML = `
         <h3>${location.name}</h3>
@@ -96,11 +97,12 @@ function showLocation(location) {
     zoomToMarkedLocation(mapCoords.x, mapCoords.y);
 }
 
-function createMarker(x, y, name) {
+function createMarker(x, y, name, type = 'default') {
     const marker = document.createElement('div');
     marker.className = 'marker';
     marker.style.left = `${x}px`;
     marker.style.top = `${y}px`;
+    marker.dataset.type = type;
     
     const label = document.createElement('div');
     label.className = 'marker-label';
@@ -108,12 +110,10 @@ function createMarker(x, y, name) {
     
     marker.appendChild(label);
     markers.appendChild(marker);
-    
     marker.addEventListener('click', function() {
         const activeMarkers = document.querySelectorAll('.marker.active');
         activeMarkers.forEach(m => m.classList.remove('active'));
         marker.classList.add('active');
-        
         if (name !== "Unknown Location") {
             const locationIndex = [...locationSelect.options].findIndex(option => 
                 option.textContent === name
@@ -124,6 +124,18 @@ function createMarker(x, y, name) {
             }
         }
     });
+    
+    marker.addEventListener('mouseenter', function() {
+        label.style.opacity = '1';
+    });
+    
+    marker.addEventListener('mouseleave', function() {
+        if (!marker.classList.contains('active')) {
+            label.style.opacity = '0';
+        }
+    });
+    
+    return marker;
 }
 
 function clearMarkers() {
@@ -346,11 +358,12 @@ function markUserLocation() {
     }
 
     const location = findLocationByCoords(xInput, yInput, zInput);
-
     clearMarkers();
     const mapCoords = convertToMapCoords(xInput, yInput);
+    
+    let marker;
     if (location) {
-        createMarker(mapCoords.x, mapCoords.y, location.name);
+        marker = createMarker(mapCoords.x, mapCoords.y, location.name);
         locationInfo.innerHTML = `
             <h3>${location.name}</h3>
             <p>Coordinates: X: ${xInput.toFixed(2)}, Y: ${yInput.toFixed(2)}, Z: ${zInput.toFixed(2)}</p>
@@ -360,7 +373,7 @@ function markUserLocation() {
             <p>Z: ${location.bounds.minZ.toFixed(2)} to ${location.bounds.maxZ.toFixed(2)}</p>
         `;
     } else {
-        createMarker(mapCoords.x, mapCoords.y, "Unknown Location");
+        marker = createMarker(mapCoords.x, mapCoords.y, "Unknown Location", "important");
         locationInfo.innerHTML = `
             <h3>Location not found</h3>
             <p>Coordinates: X: ${xInput.toFixed(2)}, Y: ${yInput.toFixed(2)}, Z: ${zInput.toFixed(2)}</p>
@@ -368,6 +381,7 @@ function markUserLocation() {
         `;
     }
     
+    marker.classList.add('active');
     zoomToMarkedLocation(mapCoords.x, mapCoords.y);
 }
 

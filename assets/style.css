@@ -360,27 +360,110 @@ body {
 
 .marker {
     position: absolute;
-    width: 24px;
-    height: 24px;
-    background-color: var(--accent-color);
-    border: 3px solid white;
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
+    width: 28px;
+    height: 36px;
+    transform: translate(-50%, -100%);
     z-index: 10;
     pointer-events: all;
     cursor: pointer;
-    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    background: transparent;
+    border: none;
+}
+
+.marker::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 384 512'%3E%3Cpath fill='%234d79f6' d='M192 0C86 0 0 86 0 192c0 77 39 115 87 190 34 52 67 124 74 210 1 17 15 30 32 30s30-13 32-30c7-86 40-158 74-210 48-75 87-113 87-190C384 86 298 0 192 0zm0 320c-71 0-128-57-128-128S121 64 192 64s128 57 128 128-57 128-128 128z'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: transform 0.3s ease;
+}
+
+.marker:hover::before {
+    transform: translateY(-5px) scale(1.1);
+}
+
+.marker.active::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 384 512'%3E%3Cpath fill='%2300d97e' d='M192 0C86 0 0 86 0 192c0 77 39 115 87 190 34 52 67 124 74 210 1 17 15 30 32 30s30-13 32-30c7-86 40-158 74-210 48-75 87-113 87-190C384 86 298 0 192 0zm0 320c-71 0-128-57-128-128S121 64 192 64s128 57 128 128-57 128-128 128z'/%3E%3C/svg%3E");
+    animation: bounce 1s infinite alternate;
+}
+
+.marker[data-type="important"]::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 384 512'%3E%3Cpath fill='%23ff5252' d='M192 0C86 0 0 86 0 192c0 77 39 115 87 190 34 52 67 124 74 210 1 17 15 30 32 30s30-13 32-30c7-86 40-158 74-210 48-75 87-113 87-190C384 86 298 0 192 0zm0 320c-71 0-128-57-128-128S121 64 192 64s128 57 128 128-57 128-128 128z'/%3E%3C/svg%3E");
+}
+
+.marker-label {
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 15;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    opacity: 0;
     transition: all 0.3s ease;
+    pointer-events: none;
 }
 
-.marker:hover {
-    transform: translate(-50%, -50%) scale(1.2);
+.marker:hover .marker-label,
+.marker.active .marker-label {
+    opacity: 1;
 }
 
-.marker.active {
-    background-color: var(--success-color);
-    border-color: white;
-    z-index: 20;
+@keyframes bounce {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-5px);
+    }
+}
+
+.marker.active::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    background-color: rgba(0, 217, 126, 0.4);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 0;
+    }
+}
+
+#markers {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    transform-origin: 0 0;
 }
 
 .marker-label {
